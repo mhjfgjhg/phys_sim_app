@@ -1,0 +1,23 @@
+name: PhysCoreBindings
+output: 'lib/src/generated/phys_core_bindings.dart'
+
+headers:
+  entry-points:
+    - '../phys_core/include/phys_engine.h'
+  include-directives:
+    - '../phys_core/include/**'
+
+compiler-opts:
+  - '-I../phys_core/include'
+
+functions:
+  include:
+    # - 'euler_step'
+    - 'step_pendulum'
+
+structs:
+  include:
+    - 'PendulumState'
+    - 'PendulumParams'
+
+use-ffi-native: false
