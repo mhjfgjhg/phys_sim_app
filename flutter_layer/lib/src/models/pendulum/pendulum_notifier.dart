@@ -1,8 +1,8 @@
 import 'dart:ffi' as ffi;
 import 'package:ffi/ffi.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../generated/phys_core_bindings.dart'; // Твой файл от ffigen
-import '../models/pendulum_data.dart';
+import '../../generated/phys_core_bindings.dart'; // Твой файл от ffigen
+import 'pendulum_data.dart';
 
 // 1. Загружаем библиотеку
 final dylib = ffi.DynamicLibrary.open('libphys_core.so');

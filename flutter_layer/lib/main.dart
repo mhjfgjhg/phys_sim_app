@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'src/logic/pendulum_notifier.dart';
-import 'src/ui/pendulum_painter.dart';
+import 'src/models/pendulum/pendulum.dart';
 
 void main() {
   runApp(
