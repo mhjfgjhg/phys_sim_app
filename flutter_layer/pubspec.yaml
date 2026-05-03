@@ -52,27 +52,6 @@ dev_dependencies:
   flutter_lints: ^6.0.0
 
 
-ffigen:
-  name: PhysCoreBindings
-  description: 'Автоматически сгенерированные биндинги для физического движка (C)'
-  output: 'lib/src/generated/phys_core_bindings.dart'
-  headers:
-    entry-points:
-      - '../phys_core/include/phys_engine.h'
-    include-directives:
-      - '../phys_core/include/phys_types.h'
-  functions:
-    include:
-      - 'euler_step'
-  structs:
-    include:
-      - 'PendulumState'
-      - 'PendulumParams'
-  comments:
-    style: any
-    length: full
-
-
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 

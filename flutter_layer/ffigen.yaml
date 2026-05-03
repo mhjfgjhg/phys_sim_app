@@ -1,23 +1,20 @@
 name: PhysCoreBindings
+description: 'FFI bindings for phys_core C library'
 output: 'lib/src/generated/phys_core_bindings.dart'
 
 headers:
   entry-points:
-    - '../phys_core/include/phys_engine.h'
-  include-directives:
-    - '../phys_core/include/**'
+    - '../phys_core/include/phys_ffi.h'
 
 compiler-opts:
   - '-I../phys_core/include'
 
+# Явно генерируем функции и структуры
 functions:
   include:
-    # - 'euler_step'
     - 'step_pendulum'
 
 structs:
   include:
     - 'PendulumState'
     - 'PendulumParams'
-
-use-ffi-native: false

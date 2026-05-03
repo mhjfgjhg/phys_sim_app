@@ -4,46 +4,20 @@
 // ignore_for_file: type=lint
 import 'dart:ffi' as ffi;
 
-/// Состояние системы (то, что меняется)
-final class PendulumState extends ffi.Struct {
-  /// Угол отклонения (рад)
-  @ffi.Double()
-  external double theta;
-
-  /// Угловая скорость (рад/с)
-  @ffi.Double()
-  external double omega;
-}
-
-/// Параметры системы (то, что настраивает пользователь)
-final class PendulumParams extends ffi.Struct {
-  /// Длина нити (м)
-  @ffi.Double()
-  external double L;
-
-  /// Масса грузика (кг)
-  @ffi.Double()
-  external double m;
-
-  /// Ускорение свободного падения (м/с^2)
-  @ffi.Double()
-  external double g;
-
-  /// Коэффициент затухания (вязкость среды)
-  @ffi.Double()
-  external double b;
-}
-
-/// Wrapper class for C bindings
+/// FFI bindings for phys_core C library
 class PhysCoreBindings {
-  final ffi.DynamicLibrary _dylib;
+  /// Holds the symbol lookup function.
+  final ffi.Pointer<T> Function<T extends ffi.NativeType>(String symbolName)
+  _lookup;
 
-  PhysCoreBindings(this._dylib);
+  /// The symbols are looked up in [dynamicLibrary].
+  PhysCoreBindings(ffi.DynamicLibrary dynamicLibrary)
+    : _lookup = dynamicLibrary.lookup;
 
-  late final _step_pendulum = _dylib.lookupFunction<
-      ffi.Void Function(ffi.Pointer<PendulumState>, ffi.Pointer<PendulumParams>, ffi.Double),
-      void Function(ffi.Pointer<PendulumState>, ffi.Pointer<PendulumParams>, double)
-  >('step_pendulum');
+  /// The symbols are looked up with [lookup].
+  PhysCoreBindings.fromLookup(
+    ffi.Pointer<T> Function<T extends ffi.NativeType>(String symbolName) lookup,
+  ) : _lookup = lookup;
 
   void step_pendulum(
     ffi.Pointer<PendulumState> current,
@@ -52,4 +26,45 @@ class PhysCoreBindings {
   ) {
     return _step_pendulum(current, p, dt);
   }
+
+  late final _step_pendulumPtr =
+      _lookup<
+        ffi.NativeFunction<
+          ffi.Void Function(
+            ffi.Pointer<PendulumState>,
+            ffi.Pointer<PendulumParams>,
+            ffi.Double,
+          )
+        >
+      >('step_pendulum');
+  late final _step_pendulum = _step_pendulumPtr
+      .asFunction<
+        void Function(
+          ffi.Pointer<PendulumState>,
+          ffi.Pointer<PendulumParams>,
+          double,
+        )
+      >();
+}
+
+final class PendulumState extends ffi.Struct {
+  @ffi.Double()
+  external double theta;
+
+  @ffi.Double()
+  external double omega;
+}
+
+final class PendulumParams extends ffi.Struct {
+  @ffi.Double()
+  external double L;
+
+  @ffi.Double()
+  external double m;
+
+  @ffi.Double()
+  external double g;
+
+  @ffi.Double()
+  external double b;
 }
